@@ -32,6 +32,8 @@ public class HelloController {
                 .addValue("left", left)
                 .addValue("right", right);
         return jdbcTemplate.queryForObject("SELECT :left + :right AS answer", source,
-                (rs, rowNum) -> new Result(left, right, rs.getLong("answer")));
+                (rs, rowNum) -> {
+                    return new Result(left, right, rs.getLong("answer"));
+                });
     }
 }

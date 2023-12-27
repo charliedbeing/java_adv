@@ -7,6 +7,28 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+
+class AddExample{
+    private final Lock lock = new ReentrantLock();
+
+    private int count=0;
+
+    public void add(){
+        lock.lock();
+        try {
+            for(int i=0;i<1000000;i++){
+                count = count+1;
+            }
+            System.out.println("=============" + this.count);
+        }finally {
+            lock.unlock();
+        }
+
+    }
+
+
+
+}
  class TimedLockExample {
 
     private final Lock lock = new ReentrantLock();
@@ -122,7 +144,18 @@ class AuctionItem {
 
 public class Locks {
     public static void main(String[] args)  {
-        multiConditionVariables();
+//        multiConditionVariables();
+
+         addDemo();
+    }
+    public static void addDemo() {
+        AddExample example = new AddExample();
+
+        Thread t1 = new Thread(() -> example.add());
+        Thread t2 = new Thread(() -> example.add());
+
+        t1.start();
+        t2.start();
     }
 
     public static void tryLockDemo() {
